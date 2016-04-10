@@ -9,7 +9,7 @@ namespace
   {
     bool LAMPORT::checksig(unsigned char* data, uint8_t[20] sig, uint8_t[20][160] pubkey) 
     {
-
+      
     }
 
     char[160][20] LAMPORT::createsig(unsigned char* data, unsigned uint512_t prikey) 

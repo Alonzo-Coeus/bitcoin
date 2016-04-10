@@ -7,7 +7,13 @@
 
 class LAMPORT
 {
-
+private:
+    uint8_t pubkey[20][160];
+    
+public:
+    /* data is the transaction and sig is 160-bit's  */
+    bool checksig(unsigned char* data, uint8_t[20] sig, uint8_t[20][160] pubkey);
+    
 }
 
 #endif

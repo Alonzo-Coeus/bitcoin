@@ -67,6 +67,14 @@ const char* ScriptErrorString(const ScriptError serror)
             return "NOPx reserved for soft-fork upgrades";
         case SCRIPT_ERR_PUBKEYTYPE:
             return "Public key is neither compressed or uncompressed";
+        case SCRIPT_ERR_LAMPORTCHECKSIG:
+            return "Script failed an OP_LAMPORTCHECKSIG operation";
+        case SCRIPT_ERR_LAMPORTCHECKSIGVERIFY:
+            return "Script failed an OP_LAMPORTCHECKSIGVERIFY operation";
+        case SCRIPT_ERR_LAMPORTCHECKMULTISIG:
+            return "Script failed an OP_LAMPORTCHECKMULTISIG operation";
+        case SCRIPT_ERR_LAMPORTCHECKMULTISIGVERIFY:
+            return "Script failed an OP_LAMPORTCHECKMULTISIGVERIFY operation";
         case SCRIPT_ERR_UNKNOWN_ERROR:
         case SCRIPT_ERR_ERROR_COUNT:
         default: break;

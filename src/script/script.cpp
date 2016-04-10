@@ -142,7 +142,8 @@ const char* GetOpName(opcodetype opcode)
     case OP_NOP10                  : return "OP_NOP10";
 
     //QSAFE Functions
-    case OP_LAMPORTSIGVERIFY       : return "OP_LAMPORTSIGVERIFY";
+    case OP_LAMPORTSIG       : return "OP_LAMPORTSIG";
+    case OP_LAMPORTSIGVERIFY : return "OP_LAMPORTSIGVERIFY";
 
     case OP_INVALIDOPCODE          : return "OP_INVALIDOPCODE";
 

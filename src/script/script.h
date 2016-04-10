@@ -175,7 +175,8 @@ enum opcodetype
     OP_NOP10 = 0xb9,
 
     //QSafe functions
-    OP_LAMPORTSIGVERIFY = 0xc0,
+    OP_LAMPORTSIGV = 0xc0,
+    OP_LAMPORTSIGVERIFY = 0xc1,
 
 
     // template matching params

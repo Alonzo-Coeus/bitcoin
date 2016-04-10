@@ -177,7 +177,9 @@ enum opcodetype
     //QSafe functions
     OP_LAMPORTCHECKSIG = 0xc0,
     OP_LAMPORTCHECKSIGVERIFY = 0xc1,
-
+    OP_LAMPORTCHECKMULTISIG = 0xc2,
+    OP_LAMPORTCHECKMULTISIGVERIFY = 0xc3,
+    
 
     // template matching params
     OP_SMALLINTEGER = 0xfa,

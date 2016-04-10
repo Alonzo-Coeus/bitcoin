@@ -146,6 +146,7 @@ const char* GetOpName(opcodetype opcode)
     case OP_LAMPORTCHECKSIGVERIFY : return "OP_LAMPORTSIGVERIFY";
     case OP_LAMPORTCHECKMULTISIG  : return "OP_LAMPORTCHECKMULTISIG";
     case OP_LAMPORTCHECKMULTISIGVERIFY : return "OP_LAMPORTCHECKMULTISIGVERIFY";
+    
     case OP_INVALIDOPCODE          : return "OP_INVALIDOPCODE";
 
     // Note:

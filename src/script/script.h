@@ -166,14 +166,15 @@ enum opcodetype
     OP_NOP2 = OP_CHECKLOCKTIMEVERIFY,
     OP_NOP3 = 0xb2,
     OP_CHECKSEQUENCEVERIFY = OP_NOP3,
-    OP_NOP4 = 0xb3,
-    OP_NOP5 = 0xb4,
-    OP_NOP6 = 0xb5,
-    OP_NOP7 = 0xb6,
+    //QSafe Function
+    OP_LAMPORTCHECKSIG = 0xb3,
+    OP_LAMPORTCHECKSIGVERIFY = 0xb4,
+    OP_LAMPORTCHECKMULTISIG = 0xb5,
+    OP_LAMPORTCHECKMULTISIGVERIFY = 0xb6,
     OP_NOP8 = 0xb7,
     OP_NOP9 = 0xb8,
     OP_NOP10 = 0xb9,
-
+    
 
     // template matching params
     OP_SMALLINTEGER = 0xfa,

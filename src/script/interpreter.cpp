@@ -9,6 +9,7 @@
 #include "crypto/ripemd160.h"
 #include "crypto/sha1.h"
 #include "crypto/sha256.h"
+#include "crypto/lamport.h"
 #include "pubkey.h"
 #include "script/script.h"
 #include "uint256.h"
@@ -410,8 +411,7 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                     break;
                 }
 
-                case OP_NOP1: case OP_NOP4: case OP_NOP5:
-                case OP_NOP6: case OP_NOP7: case OP_NOP8: case OP_NOP9: case OP_NOP10:
+                case OP_NOP1: case OP_NOP8: case OP_NOP9: case OP_NOP10:
                 {
                     if (flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS)
                         return set_error(serror, SCRIPT_ERR_DISCOURAGE_UPGRADABLE_NOPS);
@@ -986,6 +986,41 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                     }
                 }
                 break;
+                
+                case OP_LAMPORTCHECKSIG:
+                case OP_LAMPORTCHECKSIGVERIFY:
+                {
+                    if (stack.size() < 2)
+                        return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
+
+                    valtype& vchSig    = stacktop(-2);
+                    valtype& vchPubKey = stacktop(-1);
+                    
+                    fSuccess = /* place holder */ true;
+                    
+                    popstack(stack);
+                    popstack(stack);
+                    stack.push_back(fSuccess ? vchTrue : vchFalse);
+                    
+                    if(OP_LAMPORTCHECKSIGVERIFY == opcode) 
+                    {
+                        if(fSuccess)
+                            popstack(stack);
+                        else 
+                            return set_error(serror, SCRIPT_ERR_CHECKSIGVERIFY);
+                    }
+                }
+                
+                case OP_LAMPORTCHECKMULTISIG:
+                case OP_LAMPORTCHECKMULTISIGVERIFY:
+                {
+                    // ([sig ...] num_of_signatures [pubkey ...] num_of_pubkeys -- bool)
+                    int i = 1;
+                    if ((int)stack.size() < i)
+                        return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
+                    
+                    
+                }
 
                 default:
                     return set_error(serror, SCRIPT_ERR_BAD_OPCODE);

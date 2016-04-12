@@ -592,7 +592,12 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                     popstack(stack);
                 }
                 break;
-
+                
+                case OP_NOP1: case OP_NOP8: case OP_NOP9: case OP_NOP10:
+                {
+                    popstack(stack);
+                }
+                break;
                 case OP_DUP:
                 {
                     // (x -- x x)

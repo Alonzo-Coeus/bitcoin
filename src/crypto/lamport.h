@@ -2,7 +2,6 @@
 #ifndef BITCOIN_CRYPTO_LAMPORT_H
 #define BITCOIN_CRYPTO_LAMPORT_H
 
-#include "crypto/lamport.h"
 #include "crypto/ripemd160.h"
 
 class LAMPORT

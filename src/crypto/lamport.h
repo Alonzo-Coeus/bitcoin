@@ -17,4 +17,4 @@ public:
     
 }
 
-#endif
+#endif // BITCOIN_CRYPTO_LAMPORT_H

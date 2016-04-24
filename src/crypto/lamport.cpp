@@ -10,8 +10,8 @@ namespace
     bool LAMPORT::checksig(unsigned char* data, char sig[160][20], char pubkey[320][20]) 
     {
             bool messhashb[160];
-            valtype messhash(true ? 20 : 32);
-            CRIPEMD160().Write(begin_ptr(data), data.size()).Finalize(begin_ptr(messhash));
+            unsigned char* messhash;
+            CRIPEMD160().Write(&data, data.size()).Finalize(&messhash);
             memcpy(messhashb, messhash, sizeof(messhashb));
             
             char _sig[160][20];
@@ -31,10 +31,10 @@ namespace
               }
             }
             
-            valtype sighop(true ? 20 : 32)
+            unsigned char* sighop;
             for(int i=0; i < 160; i++)
             {
-              CRIPEMD160().Write(begin_ptr(_sig[i]), _sig[i].size()).Finalize(begin_ptr(sighop));
+              CRIPEMD160().Write(&_sig[i], _sig[i].size()).Finalize(&sighop);
               memcpy(_csig[i], sighop, _csig[i].size());
             }
             return sig == _csig;
@@ -45,16 +45,16 @@ namespace
     {
       /* hash of the message */
       bool messhashb[160];
-      valtype messhash(true ? 20 : 32);
-      CRIPEMD160().Write(begin_ptr(data), data.size()).Finalize(begin_ptr(messhash));
+      unsigned char* messhash;
+      CRIPEMD160().Write(&data, data.size()).Finalize(&messhash);
       
       /* creating true key from seed (the seed is used as the key by the user but it only is a form of compress key) */
       valtype vchHash(true ? 20 : 32);
-      CRIPEMD160().Write(begin_ptr(prikey), prikey.size()).Finalize(begin_ptr(vchHash));
+      CRIPEMD160().Write(&prikey, prikey.size()).Finalize(&vchHash);
       for(int i =0; i < 320; i++) 
       {
-        valtype tempHash(true ? 20 : 32);
-        CRIPEMD160().Write(begin_ptr(vchHash), prikey.size()).Write(i, i.size()).Finalize(begin_ptr(tempHash));
+        unsigned char* tempHash;
+        CRIPEMD160().Write(&vchHash, prikey.size()).Write(&i, i.size()).Finalize(&tempHash);
         prikeys[i] = temphash;
       }
       

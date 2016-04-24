@@ -3,10 +3,6 @@
 
 #include "crypto/ripemd160.h"
 #include "crypto/common.h"
-namespace
-{
-  namespace lamport
-  {
     bool LAMPORT::checksig(unsigned char* data, char sig[160][20], char pubkey[320][20]) 
     {
             bool messhashb[160];
@@ -74,5 +70,3 @@ namespace
       }
       return sig;
     }
-  }
-}

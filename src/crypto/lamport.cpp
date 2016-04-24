@@ -7,7 +7,7 @@ namespace
 {
   namespace lamport
   {
-    bool LAMPORT::checksig(unsigned char* data, char[160][20] sig, char[20][160] pubkey) 
+    bool LAMPORT::checksig(unsigned char* data, char sig[160][20], char pubkey[320][20]) 
     {
             bool messhashb[160];
             valtype messhash(true ? 20 : 32);
@@ -16,18 +16,17 @@ namespace
             
             char _sig[160][20];
             char _csig[160][20];
-            
             for(int i=0; i < 160; i++)
             {
               for(int o=0; o < 20; o++)
               {
                   if(messhashb[i]) 
                   {
-                    _sig[o][i] = pubkey[o][2*i];
+                    _sig[i][o] = pubkey[2*i][o];
                   }
                   else
                   {
-                    _sig[o][i] = pubkey=[o][(2*i)+1];
+                    _sig[i][o] = pubkey[(2*i)+1][o];
                   }
               }
             }
@@ -42,7 +41,7 @@ namespace
           
     }
 
-    char[160][20] LAMPORT::createsig(unsigned char* data, unsigned uint512_t prikey) 
+    char[320][20] LAMPORT::createsig(unsigned char* data, unsigned uint512_t prikey) 
     {
       /* hash of the message */
       bool messhashb[160];
@@ -60,7 +59,7 @@ namespace
       }
       
       /* the signing will happen uder this */
-      char[160][20] sig;
+      char sig[320][20];
       memcpy(messhashb, messhash, sizeof(messhashb));
       for(int i=0; i < 160; i++)
       {

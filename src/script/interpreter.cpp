@@ -996,7 +996,7 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                     valtype& vchSig    = stacktop(-2);
                     valtype& vchPubKey = stacktop(-1);
                     
-                    fSuccess = /* place holder */ true;
+                    bool fSuccess = /* place holder */ true;
                     
                     popstack(stack);
                     popstack(stack);

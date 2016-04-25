@@ -7,7 +7,7 @@
     {
             bool messhashb[160];
             unsigned char* messhash;
-            CRIPEMD160().Write(&data, data.size()).Finalize(&messhash);
+            CRIPEMD160().Write(&data, sizeof(data)).Finalize(&messhash);
             memcpy(messhashb, messhash, sizeof(messhashb));
             
             char _sig[160][20];
@@ -30,8 +30,8 @@
             unsigned char* sighop;
             for(int i=0; i < 160; i++)
             {
-              CRIPEMD160().Write(&_sig[i], _sig[i].size()).Finalize(&sighop);
-              memcpy(_csig[i], sighop, _csig[i].size());
+              CRIPEMD160().Write(&_sig[i], sizeof(_sig[i])).Finalize(&sighop);
+              memcpy(_csig[i], sighop, sizeof(_csig[i]));
             }
             return sig == _csig;
           
@@ -42,15 +42,15 @@
       /* hash of the message */
       bool messhashb[160];
       unsigned char* messhash;
-      CRIPEMD160().Write(&data, data.size()).Finalize(&messhash);
+      CRIPEMD160().Write(&data, sizeof(data)).Finalize(&messhash);
       
       /* creating true key from seed (the seed is used as the key by the user but it only is a form of compress key) */
       unsigned char* vchHash
-      CRIPEMD160().Write(&prikey, prikey.size()).Finalize(&vchHash);
+      CRIPEMD160().Write(&prikey, sizeof(prikey)).Finalize(&vchHash);
+      char tempHash[];
       for(int i =0; i < 320; i++) 
       {
-        unsigned char* tempHash;
-        CRIPEMD160().Write(&vchHash, prikey.size()).Write(&i, i.size()).Finalize(&tempHash);
+        CRIPEMD160().Write(&vchHash, sizeof(vchHash)).Write(&i, sizeof(i)).Finalize(&tempHash);
         prikeys[i] = temphash;
       }
       

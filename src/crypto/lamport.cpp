@@ -3,7 +3,7 @@
 
 #include "crypto/ripemd160.h"
 #include "crypto/common.h"
-    bool LAMPORT::checksig(unsigned char data[], char sig[160][20], char pubkey[320][20]) 
+    bool LAMPORT::checksig(char data[], char sig[160][20], char pubkey[320][20]) 
     {
             bool messhashb[160];
             unsigned char* messhash;
@@ -37,7 +37,7 @@
           
     }
 
-    char** LAMPORT::createsig(unsigned char data[], uint512_t prikey) 
+    char** LAMPORT::createsig(char data[], uint512_t prikey) 
     {
       /* hash of the message */
       bool messhashb[160];

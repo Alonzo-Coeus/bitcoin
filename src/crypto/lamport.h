@@ -6,6 +6,8 @@
 
 #include "crypto/ripemd160.h"
 
+using namespace boost::multiprecision;
+
 class LAMPORT
 {
 private:

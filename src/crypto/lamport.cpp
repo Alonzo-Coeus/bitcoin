@@ -3,7 +3,7 @@
 
 #include "crypto/ripemd160.h"
 #include "crypto/common.h"
-    bool LAMPORT::checksig(unsigned char* data, char sig[160][20], char pubkey[320][20]) 
+    bool LAMPORT::checksig(unsigned char data[], char sig[160][20], char pubkey[320][20]) 
     {
             bool messhashb[160];
             unsigned char* messhash;
@@ -37,7 +37,7 @@
           
     }
 
-    char** LAMPORT::createsig(unsigned char* data, uint512_t prikey) 
+    char** LAMPORT::createsig(unsigned char data[][], uint512_t prikey) 
     {
       /* hash of the message */
       bool messhashb[160];
@@ -45,7 +45,7 @@
       CRIPEMD160().Write(&data, data.size()).Finalize(&messhash);
       
       /* creating true key from seed (the seed is used as the key by the user but it only is a form of compress key) */
-      valtype vchHash(true ? 20 : 32);
+      unsigned char* vchHash
       CRIPEMD160().Write(&prikey, prikey.size()).Finalize(&vchHash);
       for(int i =0; i < 320; i++) 
       {

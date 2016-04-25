@@ -2,8 +2,9 @@
 #ifndef BITCOIN_CRYPTO_LAMPORT_H
 #define BITCOIN_CRYPTO_LAMPORT_H
 
+#include <boost/multiprecision/cpp_int.hpp>
+
 #include "crypto/ripemd160.h"
-#include "uint512_t"
 
 class LAMPORT
 {
@@ -13,7 +14,7 @@ private:
     
 public:
     bool checksig(unsigned char* data, char sig[160][20], char pubkey[320][20]);    /* data is the transaction and sig is 160-bit's  */
-    char* createsig(unsigned char* data, unsigned uint512_t prikey);                 /* data is data to be signed and prikey is a sudo-random num gen seed */
+    char* createsig(unsigned char* data, uint512_t prikey);                 /* data is data to be signed and prikey is a sudo-random num gen seed */
     
 };
 

@@ -37,7 +37,7 @@
           
     }
 
-    char*[20] LAMPORT::createsig(char data[], uint512_t prikey) 
+    char [160][20]LAMPORT::createsig(char data[], uint512_t prikey) 
     {
       /* hash of the message */
       bool messhashb[160];

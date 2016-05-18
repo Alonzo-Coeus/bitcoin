@@ -5,6 +5,7 @@
 #include "crypto/common.h"
     bool LAMPORT::checksig(char data[], char sig[160][20], char pubkey[320][20]) 
     {
+        //use a for loop which terminates if not valid then function returns var valid
             bool messhashb[160];
             unsigned char* messhash;
             CRIPEMD160().Write(&data, sizeof(data)).Finalize(&messhash);

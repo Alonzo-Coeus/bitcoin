@@ -2,20 +2,23 @@
 #ifndef BITCOIN_CRYPTO_LAMPORT_H
 #define BITCOIN_CRYPTO_LAMPORT_H
 
-#include <stdint.h>
-#include <stdlib.h>
+#include <boost/multiprecision/cpp_int.hpp>
+
 #include "crypto/ripemd160.h"
+
+using namespace boost::multiprecision;
 
 class LAMPORT
 {
 private:
-    char pubkeys[20][160];
-    char[320][20] prikeys;
-    
-public:
-    bool checksig(unsigned char* data, char[160][20] sig, char[20][160] pubkey);    /* data is the transaction and sig is 160-bit's  */
-    char[160][20] createsig(unsigned char* data, unsigned uint512_t prikey);                 /* data is data to be signed and prikey is a sudo-random num gen seed */
-    
-}
+    char pubkeys[320][20];
+    char prikeys[320][20];
 
-#endif
+public:
+    const int chuncksize = 1; /* in bytes */
+    bool checksig(unsigned char data[], char sig[20][2][20], char rootkey[20], char exmerklewit[][20] /*this is the merkle wit minus the main public key*/, char pubkey[20][2][20]);
+    char * createsig(unsigned char data[], uint512_t prikey, int selkeyset);                 /* data is data to be signed and prikey is a sudo-random num gen seed */
+    char * createpubkey(uint512_t prikey);
+};
+
+#endif // BITCOIN_CRYPTO_LAMPORT_H

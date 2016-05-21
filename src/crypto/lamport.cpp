@@ -7,14 +7,14 @@
 bool LAMPORT::checksig(unsigned char data[], char sig[20][2][20], char rootkey[20], char merklewit[])
 {
 
-  char exmerklewit[][20]; /*this is the merkle wit minus the main public key*/
+  char exmerklewit[8][20]; /*this is the merkle wit minus the main public key max number of publickeys to rootkey is 256 due to 2^n where n is the first array index is 8*/
   char pubkey[20][2][20];
   bool valid = true;
   bool merklecheckfin = false;
 
   //start converting merkle wit to exmerklewit and public key
-  char merkbuffer[800]; //size of publickey is the max size of the buffer
-  int i;
+  char merklebuffer[800]; //size of publickey is the max size of the buffer
+  unsigned int i;
   for(i = 0; i < sizeof(merklewit); i++)
   {
     if(merklewit[i] == 0x00 && merklewit[i+1] == 0x00) /*test for partition beetween merkle segments*/

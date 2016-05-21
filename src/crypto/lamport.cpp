@@ -29,7 +29,7 @@ bool LAMPORT::checksig(unsigned char data[], char sig[20][2][20], char rootkey[2
   {
     if(merklewit[i] == 0x00 && merklewit[i+1] == 0x00)
     {
-      memcpy(&exmerklewit[r], &merklebuffer, sizeof(merklebuffer))
+      memcpy(&exmerklewit[r], &merklebuffer, sizeof(merklebuffer));
       r++;
       i++; //get i+1 index chunk so we can jump to next part of the merklewit at the end of cycle
       o = 0;
@@ -65,7 +65,7 @@ bool LAMPORT::checksig(unsigned char data[], char sig[20][2][20], char rootkey[2
       */
       return true; // if compleats all tests return true
 }
-    char * LAMPORT::createsig(unsigned char data[], uint512_t prikey)
+    char * LAMPORT::createsig(unsigned char data[], uint512_t prikey, int sellectedpubkey)
     {
       /* hash of the message */
       bool messhashb[160];

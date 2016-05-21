@@ -13,7 +13,7 @@ bool LAMPORT::checksig(unsigned char data[], char sig[20][2][20], char rootkey[2
   bool merklecheckfin = false;
 
   //start converting merkle wit to exmerklewit and public key
-  char merkbuffer[];
+  char merkbuffer[800]; //size of publickey is the max size of the buffer
   int i;
   for(i = 0; i < sizeof(merklewit); i++)
   {
@@ -63,6 +63,7 @@ bool LAMPORT::checksig(unsigned char data[], char sig[20][2][20], char rootkey[2
         CRIPEMD160().Write(begin_ptr(datapart), datapart.size()).Finalize(begin_ptr(datahashs[i]));
       }
       */
+      return true; // if compleats all tests return true
 }
     char * LAMPORT::createsig(unsigned char data[], uint512_t prikey)
     {

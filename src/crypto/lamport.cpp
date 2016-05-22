@@ -77,7 +77,7 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
       char temphash[20];
       for(int i =0; i < 320; i++)
       {
-        CRIPEMD160().Write(&vchHash, sizeof(vchHash)).Write(&i, sizeof(i)).Finalize(&tempHash);
+        CRIPEMD160().Write(&vchHash, sizeof(vchHash)).Write(&i, sizeof(i)).Finalize(&temphash);
         prikeys[i] = temphash;
       }
 

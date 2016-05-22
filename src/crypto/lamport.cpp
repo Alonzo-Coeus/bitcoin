@@ -3,77 +3,87 @@
 
 #include "crypto/ripemd160.h"
 #include "crypto/common.h"
-namespace
+#include "uint256.h"
+bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char rootkey[20], char merklewit[])
 {
-  namespace lamport
-  {
-    bool LAMPORT::checksig(unsigned char* data, char[160][20] sig, char[20][160] pubkey) 
-    {
-            bool messhashb[160];
-            valtype messhash(true ? 20 : 32);
-            CRIPEMD160().Write(begin_ptr(data), data.size()).Finalize(begin_ptr(messhash));
-            memcpy(messhashb, messhash, sizeof(messhashb));
-            
-            char _sig[160][20];
-            char _csig[160][20];
-            
-            for(int i=0; i < 160; i++)
-            {
-              for(int o=0; o < 20; o++)
-              {
-                  if(messhashb[i]) 
-                  {
-                    _sig[o][i] = pubkey[o][2*i];
-                  }
-                  else
-                  {
-                    _sig[o][i] = pubkey=[o][(2*i)+1];
-                  }
-              }
-            }
-            
-            valtype sighop(true ? 20 : 32)
-            for(int i=0; i < 160; i++)
-            {
-              CRIPEMD160().Write(begin_ptr(_sig[i]), _sig[i].size()).Finalize(begin_ptr(sighop));
-              memcpy(_csig[i], sighop, _csig[i].size());
-            }
-            return sig == _csig;
-          
-    }
 
-    char[160][20] LAMPORT::createsig(unsigned char* data, unsigned uint512_t prikey) 
+  char exmerklewit[8][20]; /*this is the merkle wit minus the main public key max number of publickeys to rootkey is 256 due to 2^n where n is the first array index is 8*/
+  char pubkey[20][2][20];
+  bool merklecheckfin = false;
+
+  //start converting merkle wit to exmerklewit and public key
+  char merklebuffer[800]; //size of publickey is the max size of the buffer
+  unsigned int i;
+  for(i = 0; i < sizeof(merklewit); i++)
+  {
+    if(merklewit[i] == 0x00 && merklewit[i+1] == 0x00) /*test for partition beetween merkle segments*/
+      break;
+    merklebuffer[i] = merklewit[i];
+  }
+
+  memcpy(&pubkey, &merklebuffer, sizeof(merklebuffer));
+  int o = 0;
+  int r = 0; //number of times we have reset o count
+  for(; i < sizeof(merklewit); i++)
+  {
+    if(merklewit[i] == 0x00 && merklewit[i+1] == 0x00)
+    {
+      memcpy(&exmerklewit[r], &merklebuffer, sizeof(merklebuffer));
+      r++;
+      i++; //get i+1 index chunk so we can jump to next part of the merklewit at the end of cycle
+      o = 0;
+    }
+    else
+    {
+      merklebuffer[o] = merklewit[i];
+      o++;
+    }
+  }
+  //end decoding merkle wit format
+
+  //start checking if new publickey is a part of the root key
+  for(int i = 0; !merklecheckfin; i++) //to end if false we will use return to lower processing time
+  {
+    return false;
+  }
+  //end checking if new publickey is a part of the root key
+
+  /*
+      unsigned char* datapart;
+      unsigned char[(160/LAMPORT::chuncksize)]* datahashs;
+      for(int i = 0; i < (160/LAMPORT::chuncksize); i++)
+      {
+
+        for(int o = 0; o < chuncksizeinbyte; o++)
+        {
+          datapart[o] = data[(i * LAMPORT::chuncksize) + o];
+        }
+
+        CRIPEMD160().Write(begin_ptr(datapart), datapart.size()).Finalize(begin_ptr(datahashs[i]));
+      }
+      */
+      return true; // if compleats all tests return true
+}
+    char *** LAMPORT::createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey)
     {
       /* hash of the message */
       bool messhashb[160];
-      valtype messhash(true ? 20 : 32);
-      CRIPEMD160().Write(begin_ptr(data), data.size()).Finalize(begin_ptr(messhash));
-      
+      unsigned char messhash[20];
+      CRIPEMD160().Write(&data, sizeof(data)).Finalize(&messhash);
+
       /* creating true key from seed (the seed is used as the key by the user but it only is a form of compress key) */
-      valtype vchHash(true ? 20 : 32);
-      CRIPEMD160().Write(begin_ptr(prikey), prikey.size()).Finalize(begin_ptr(vchHash));
-      for(int i =0; i < 320; i++) 
+      unsigned char* vchHash
+      CRIPEMD160().Write(&prikey, sizeof(prikey)).Finalize(&vchHash);
+      char temphash[20];
+      for(int i =0; i < 320; i++)
       {
-        valtype tempHash(true ? 20 : 32);
-        CRIPEMD160().Write(begin_ptr(vchHash), prikey.size()).Write(i, i.size()).Finalize(begin_ptr(tempHash));
+        CRIPEMD160().Write(&vchHash, sizeof(vchHash)).Write(&i, sizeof(i)).Finalize(&tempHash);
         prikeys[i] = temphash;
       }
-      
-      /* the signing will happen uder this */
-      char[160][20] sig;
-      memcpy(messhashb, messhash, sizeof(messhashb));
-      for(int i=0; i < 160; i++)
-      {
-        if(messhashb[i]) 
-        {
-          sig[i] = prikeys[2*i];
-        }
-        else
-        {
-          sig[i] = prikeys[(2*i)+1];
-        }
-      }
-      return sig;
+
+      /* the signing will happen under this */
+      char sig[20][2][20];
+
+
+      return &sig;
     }
-  }
-}

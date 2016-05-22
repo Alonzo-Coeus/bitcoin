@@ -9,7 +9,6 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
 
   char exmerklewit[8][20]; /*this is the merkle wit minus the main public key max number of publickeys to rootkey is 256 due to 2^n where n is the first array index is 8*/
   char pubkey[20][2][20];
-  bool merklecheckfin = false;
 
   //start converting merkle wit to exmerklewit and public key
   char merklebuffer[800]; //size of publickey is the max size of the buffer
@@ -45,10 +44,10 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
 
   //start checking if new publickey is a part of the root key
   char tempverifyhash[20];
-  RIPEMD160().Write(&pubkey[0][0][0], 800).Finalize(&tempverifyhash[0]); //first element is start of arrays address length pre-def
+  CRIPEMD160().Write(&pubkey[0][0][0], 800).Finalize(&tempverifyhash[0]); //first element is start of arrays address length pre-def
   for(int i = 0; true; i++) //to end if false we will use return to lower processing time
   {
-    if(exmerklewit[i] == {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+    if(exmerklewit[i] == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     {
       if(tempverifyhash == rootkey)
       {
@@ -60,7 +59,7 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
       }
     }
 
-    RIPEMD160().Write(&tempverifyhash[0], 20).Write(&exmerklewit[0][0], 20).Finalize(&tempverifyhash[0]);
+    CRIPEMD160().Write(&tempverifyhash[0], 20).Write(&exmerklewit[0][0], 20).Finalize(&tempverifyhash[0]);
   }
 
   //end checking if new publickey is a part of the root key

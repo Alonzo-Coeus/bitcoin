@@ -17,7 +17,9 @@ private:
 public:
     static const int chuncksize = 1; /* in bytes */
     bool checksig(unsigned char data[10000], char sig[20][2][20], char rootkey[20], char merklewit[]);
-    char * createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey);                 /* data is data to be signed and prikey is a sudo-random num gen seed */
+    char *** createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey);                 /* data is data to be signed and prikey is a sudo-random num gen seed */
+    char * createmerklewit(uint512_t prikey, int sellectedpubkey);
+    char * createrootkey(uint512_t prikey);
     char * createpubkey(uint512_t prikey);
 };
 

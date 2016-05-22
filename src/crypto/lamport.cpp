@@ -64,11 +64,9 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
       */
       return true; // if compleats all tests return true
 }
-    char *** LAMPORT::createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey)
+    int LAMPORT::createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey)
     {
       /* the signing will happen under this */
-      char sig[20][2][20];
-      char*** psig = &sig;
 
-      return psig;
+      return &sig;
     }

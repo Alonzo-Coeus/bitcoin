@@ -28,10 +28,12 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
   {
     if(merklewit[i] == 0x00 && merklewit[i+1] == 0x00)
     {
+      if(r == 8)
+        break; //lim of exmerklewit
       memcpy(&exmerklewit[r], &merklebuffer, sizeof(merklebuffer));
       r++;
       i++; //get i+1 index chunk so we can jump to next part of the merklewit at the end of cycle
-      o = 0;
+      o = 0; //merklebuffer index
     }
     else
     {
@@ -42,10 +44,25 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
   //end decoding merkle wit format
 
   //start checking if new publickey is a part of the root key
-  for(int i = 0; !merklecheckfin; i++) //to end if false we will use return to lower processing time
+  char tempverifyhash[20];
+  RIPEMD160().Write(&pubkey[0][0][0], 800).Finalize(&tempverifyhash[0]); //first element is start of arrays address length pre-def
+  for(int i = 0; true; i++) //to end if false we will use return to lower processing time
   {
-    return false;
+    if(exmerklewit[i] == {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+    {
+      if(tempverifyhash == rootkey)
+      {
+        break;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+    RIPEMD160().Write(&tempverifyhash[0], 20).Write(&exmerklewit[0][0], 20).Finalize(&tempverifyhash[0]);
   }
+
   //end checking if new publickey is a part of the root key
 
   /*

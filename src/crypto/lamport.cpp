@@ -5,7 +5,7 @@
 #include "crypto/common.h"
 #include "uint256.h"
 
-typedef vector<unsigned char> valtype;
+using namespace std;
 
 bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char rootkey[20], char merklewit[])
 {
@@ -47,7 +47,7 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
 
   //start checking if new publickey is a part of the root key
   char tempverifyhash[20];
-  CRIPEMD160().Write(begin_ptr(publickey), 800).Finalize(begin_ptr(tempverifyhash)); //first element is start of arrays address length pre-def
+  CRIPEMD160().Write(begin_ptr(pubkey), 800).Finalize(begin_ptr(tempverifyhash)); //first element is start of arrays address length pre-def
   for(int i = 0; true; i++) //to end if false we will use return to lower processing time
   {
     if(exmerklewit[i][0] == 0 && exmerklewit[i][1] == 0 && exmerklewit[i][2] == 0 && exmerklewit[i][3] == 0)

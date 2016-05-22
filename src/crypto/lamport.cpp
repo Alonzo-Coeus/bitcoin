@@ -69,15 +69,22 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
       /* hash of the message */
       bool messhashb[160];
       unsigned char messhash[20];
-      CRIPEMD160().Write(&data, sizeof(data)).Finalize(&messhash);
+      CRIPEMD160().Write(&data, 10000).Finalize(&messhash);
 
       /* creating true key from seed (the seed is used as the key by the user but it only is a form of compress key) */
-      unsigned char* vchHash
-      CRIPEMD160().Write(&prikey, sizeof(prikey)).Finalize(&vchHash);
+      unsigned char[20] vchHash
+      unsigned char[64] prikeychar;
+
+      memcpy(&prikeychar, &prikey, 64);
+
+      CRIPEMD160().Write(&prikeychar, 64).Finalize(&vchHash);
       char temphash[20];
+
+      char ichar;
       for(int i =0; i < 320; i++)
       {
-        CRIPEMD160().Write(&vchHash, sizeof(vchHash)).Write(&i, sizeof(i)).Finalize(&temphash);
+        memcpy(&ichar, &i, 1);
+        CRIPEMD160().Write(&vchHash, sizeof(vchHash)).Write(&ichar, sizeof(ichar)).Finalize(&temphash);
         prikeys[i] = temphash;
       }
 

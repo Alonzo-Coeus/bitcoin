@@ -44,7 +44,7 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
 
   //start checking if new publickey is a part of the root key
   char tempverifyhash[20];
-  CRIPEMD160().Write(&pubkey[0][0][0], 800).Finalize(&tempverifyhash[0]); //first element is start of arrays address length pre-def
+  CRIPEMD160().Write(begin_ptr(publickey), 800).Finalize(begin_ptr(tempverifyhash)); //first element is start of arrays address length pre-def
   for(int i = 0; true; i++) //to end if false we will use return to lower processing time
   {
     if(exmerklewit[i] == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -59,7 +59,7 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
       }
     }
 
-    CRIPEMD160().Write(&tempverifyhash[0], 20).Write(&exmerklewit[0][0], 20).Finalize(&tempverifyhash[0]);
+    CRIPEMD160().Write(begin_ptr(tempverifyhash), tempverifyhash.size()).Write(begin_ptr(exmerklewit), exmerklewit.size()).Finalize(begin_ptr(tempverifyhash));
   }
 
   //end checking if new publickey is a part of the root key

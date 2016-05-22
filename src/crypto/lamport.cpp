@@ -9,7 +9,6 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
 
   char exmerklewit[8][20]; /*this is the merkle wit minus the main public key max number of publickeys to rootkey is 256 due to 2^n where n is the first array index is 8*/
   char pubkey[20][2][20];
-  bool valid = true;
   bool merklecheckfin = false;
 
   //start converting merkle wit to exmerklewit and public key
@@ -65,7 +64,7 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
       */
       return true; // if compleats all tests return true
 }
-    char * LAMPORT::createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey)
+    char *** LAMPORT::createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey)
     {
       /* hash of the message */
       bool messhashb[160];
@@ -75,15 +74,15 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
       /* creating true key from seed (the seed is used as the key by the user but it only is a form of compress key) */
       unsigned char* vchHash
       CRIPEMD160().Write(&prikey, sizeof(prikey)).Finalize(&vchHash);
-      char tempHash[20];
+      char temphash[20];
       for(int i =0; i < 320; i++)
       {
-        CRIPEMD160().Write(&vchHash, sizeof(vchHash)).Write(&i, sizeof(i)).Finalize(&tempHash);
+        CRIPEMD160().Write(&vchHash, sizeof(vchHash)).Write(&i, sizeof(i)).Finalize(&temphash);
         prikeys[i] = temphash;
       }
 
-      /* the signing will happen uder this */
-      char sig[320][20];
+      /* the signing will happen under this */
+      char sig[20][2][20];
 
 
       return &sig;

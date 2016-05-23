@@ -4,12 +4,14 @@
 #include "crypto/ripemd160.h"
 #include "crypto/common.h"
 #include "uint256.h"
+
+using namespace std;
+
 bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char rootkey[20], char merklewit[])
 {
 
   char exmerklewit[8][20]; /*this is the merkle wit minus the main public key max number of publickeys to rootkey is 256 due to 2^n where n is the first array index is 8*/
   char pubkey[20][2][20];
-  bool merklecheckfin = false;
 
   //start converting merkle wit to exmerklewit and public key
   char merklebuffer[800]; //size of publickey is the max size of the buffer
@@ -28,10 +30,12 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
   {
     if(merklewit[i] == 0x00 && merklewit[i+1] == 0x00)
     {
+      if(r == 8)
+        break; //lim of exmerklewit
       memcpy(&exmerklewit[r], &merklebuffer, sizeof(merklebuffer));
       r++;
       i++; //get i+1 index chunk so we can jump to next part of the merklewit at the end of cycle
-      o = 0;
+      o = 0; //merklebuffer index
     }
     else
     {
@@ -42,10 +46,25 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
   //end decoding merkle wit format
 
   //start checking if new publickey is a part of the root key
-  for(int i = 0; !merklecheckfin; i++) //to end if false we will use return to lower processing time
+  char tempverifyhash[20];
+  CRIPEMD160().Write(begin_ptr(pubkey), 800).Finalize(begin_ptr(tempverifyhash)); //first element is start of arrays address length pre-def
+  for(int i = 0; true; i++) //to end if false we will use return to lower processing time
   {
-    return false;
+    if(exmerklewit[i][0] == 0 && exmerklewit[i][1] == 0 && exmerklewit[i][2] == 0 && exmerklewit[i][3] == 0)
+    {
+      if(tempverifyhash == rootkey)
+      {
+        break;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+    CRIPEMD160().Write(begin_ptr(tempverifyhash), 20).Write(begin_ptr(exmerklewit), 20).Finalize(begin_ptr(tempverifyhash));
   }
+
   //end checking if new publickey is a part of the root key
 
   /*
@@ -64,26 +83,8 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
       */
       return true; // if compleats all tests return true
 }
-    char *** LAMPORT::createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey)
+    char *LAMPORT::createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey)
     {
-      /* hash of the message */
-      bool messhashb[160];
-      unsigned char messhash[20];
-      CRIPEMD160().Write(&data, sizeof(data)).Finalize(&messhash);
-
-      /* creating true key from seed (the seed is used as the key by the user but it only is a form of compress key) */
-      unsigned char* vchHash
-      CRIPEMD160().Write(&prikey, sizeof(prikey)).Finalize(&vchHash);
-      char temphash[20];
-      for(int i =0; i < 320; i++)
-      {
-        CRIPEMD160().Write(&vchHash, sizeof(vchHash)).Write(&i, sizeof(i)).Finalize(&temphash);
-        prikeys[i] = temphash;
-      }
-
       /* the signing will happen under this */
-      char sig[20][2][20];
-
-
-      return &sig;
+      return &sig[0][0][0];
     }

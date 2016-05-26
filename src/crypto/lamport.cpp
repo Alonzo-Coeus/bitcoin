@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Ansho Enigu
+// Copyright (c) 2016 Alonzo Coeus
 #include "crypto/lamport.h"
 
 #include "crypto/ripemd160.h"
@@ -50,7 +50,7 @@ bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<u
   //end decoding merkle wit format
 
   //start checking if new publickey is a part of the root key
-  char tempverifyhash[20];
+  valtype tempverifyhash;
   CRIPEMD160().Write(begin_ptr(hashablepubkey), hashablepubkey.size()).Finalize(begin_ptr(tempverifyhash)); //first element is start of arrays address length pre-def
   for(int i = 0; true; i++) //to end if false we will use return to lower processing time
   {

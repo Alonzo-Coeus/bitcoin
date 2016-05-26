@@ -8,11 +8,12 @@
 using namespace std;
 typedef vector<unsigned char> valtype;
 
-bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char rootkey[20], char merklewit[])
+bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<unsigned char> rootkey, vector<unsigned char> merklewit)
 {
 
-  char exmerklewit[8][20]; /*this is the merkle wit minus the main public key max number of publickeys to rootkey is 256 due to 2^n where n is the first array index is 8*/
+  valtype exmerklewit[8]; /*this is the merkle wit minus the main public key max number of publickeys to rootkey is 256 due to 2^n where n is the first array index is 8*/
   char pubkey[20][2][20];
+  valtype hashablepubkey;
 
   //start converting merkle wit to exmerklewit and public key
   char merklebuffer[800]; //size of publickey is the max size of the buffer
@@ -25,9 +26,11 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
   }
 
   memcpy(&pubkey, &merklebuffer, sizeof(merklebuffer));
+  memcpy(&hashablepubkey, &merklebuffer, sizeof(merklebuffer));
+
   int o = 0;
   int r = 0; //number of times we have reset o count
-  for(; i < sizeof(merklewit); i++)
+  for(; i < merklewit.size(); i++)
   {
     if(merklewit[i] == 0x00 && merklewit[i+1] == 0x00)
     {
@@ -47,15 +50,13 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
   //end decoding merkle wit format
 
   //start checking if new publickey is a part of the root key
-  valtype& vch = pubkey;
-  valtype tempverifyhash;
-  valtype rootkeyval = rootkey;
-  CRIPEMD160().Write(begin_ptr(vch), 800).Finalize(begin_ptr(tempverifyhash)); //first element is start of arrays address length pre-def
+  char tempverifyhash[20];
+  CRIPEMD160().Write(begin_ptr(hashablepubkey), hashablepubkey.size()).Finalize(begin_ptr(tempverifyhash)); //first element is start of arrays address length pre-def
   for(int i = 0; true; i++) //to end if false we will use return to lower processing time
   {
     if(exmerklewit[i][0] == 0 && exmerklewit[i][1] == 0 && exmerklewit[i][2] == 0 && exmerklewit[i][3] == 0)
     {
-      if(tempverifyhash == rootkeyval)
+      if(tempverifyhash == rootkey)
       {
         break;
       }
@@ -64,8 +65,8 @@ bool LAMPORT::checksig(unsigned char data[10000], char sig[20][2][20], char root
         return false;
       }
     }
-    vch = exmerklewit;
-    CRIPEMD160().Write(begin_ptr(vch), vch.size()).Write(begin_ptr(tempverifyhash), tempverifyhash.size()).Finalize(begin_ptr(tempverifyhash));
+
+    CRIPEMD160().Write(begin_ptr(tempverifyhash), tempverifyhash.size()).Write(begin_ptr(exmerklewit[i]), exmerklewit.size()).Finalize(begin_ptr(tempverifyhash));
   }
 
   //end checking if new publickey is a part of the root key

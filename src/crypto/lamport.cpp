@@ -25,8 +25,8 @@ bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<u
     merklebuffer[i] = merklewit[i];
   }
 
-  memcpy(&pubkey, &merklebuffer, sizeof(merklebuffer));
-  memcpy(&hashablepubkey, &merklebuffer, sizeof(merklebuffer));
+  memcpy(&(pubkey[0][0][0]), &(merklebuffer[0]), sizeof(merklebuffer));
+  memcpy(&(hashablepubkey[0]), &(merklebuffer[0]), sizeof(merklebuffer));
 
   int o = 0;
   int r = 0; //number of times we have reset o count
@@ -36,7 +36,7 @@ bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<u
     {
       if(r == 8)
         break; //lim of exmerklewit
-      memcpy(&exmerklewit[r], &merklebuffer, sizeof(merklebuffer));
+      memcpy(&(exmerklewit[r][0]), &(merklebuffer[0]), sizeof(merklebuffer));
       r++;
       i++; //get i+1 index chunk so we can jump to next part of the merklewit at the end of cycle
       o = 0; //merklebuffer index
@@ -51,7 +51,7 @@ bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<u
 
   //start checking if new publickey is a part of the root key
   valtype tempverifyhash;
-  CRIPEMD160().Write(begin_ptr(hashablepubkey), hashablepubkey.size()).Finalize(begin_ptr(tempverifyhash)); //first element is start of arrays address length pre-def
+  CRIPEMD160().Write(&(hashablepubkey[0]), hashablepubkey.size()).Finalize(&(tempverifyhash[0])); //first element is start of arrays address length pre-def
   for(int i = 0; true; i++) //to end if false we will use return to lower processing time
   {
     if(exmerklewit[i][0] == 0 && exmerklewit[i][1] == 0 && exmerklewit[i][2] == 0 && exmerklewit[i][3] == 0)
@@ -66,7 +66,7 @@ bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<u
       }
     }
 
-    CRIPEMD160().Write(begin_ptr(tempverifyhash), tempverifyhash.size()).Write(begin_ptr(exmerklewit[i]), exmerklewit.size()).Finalize(begin_ptr(tempverifyhash));
+    CRIPEMD160().Write(&(tempverifyhash[0]), tempverifyhash.size()).Write(&(exmerklewit[i][0]), exmerklewit[i].size()).Finalize(&(tempverifyhash[0]));
   }
 
   //end checking if new publickey is a part of the root key

@@ -8,14 +8,27 @@
 using namespace std;
 typedef vector<unsigned char> valtype;
 
-bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<unsigned char> rootkey, vector<unsigned char> merklewit)
+bool LAMPORT::checksig(valtype *data, valtype *asig, valtype *rootkey, valtype *merklewit);
 {
+//STARTING to convert asig vector to sig[20][2][20]
+char[20][2][20] sig;
+for(int i = 0; i < 20; i++)
+{
+  for(int o = 0; o < 2; o++)
+  {
+    for(int p = 0; p < 20; p++)
+    {
+      sig[i][o][p] = asig[p + (o * 20) + (p * 40)];
+    }
+  }
+}
+//END converting asig vector to sig[20][2][20]
 
   valtype exmerklewit[8]; /*this is the merkle wit minus the main public key max number of publickeys to rootkey is 256 due to 2^n where n is the first array index is 8*/
   char pubkey[20][2][20];
   valtype hashablepubkey;
 
-  //start converting merkle wit to exmerklewit and public key
+  //START converting merkle wit to exmerklewit and public key
   char merklebuffer[800]; //size of publickey is the max size of the buffer
   unsigned int i;
   for(i = 0; i < sizeof(merklewit); i++)
@@ -47,9 +60,9 @@ bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<u
       o++;
     }
   }
-  //end decoding merkle wit format
+  //END decoding merkle wit format
 
-  //start checking if new publickey is a part of the root key
+  //START checking if new publickey is a part of the root key
   valtype tempverifyhash;
   CRIPEMD160().Write(&(hashablepubkey[0]), hashablepubkey.size()).Finalize(&(tempverifyhash[0])); //first element is start of arrays address length pre-def
   for(int i = 0; true; i++) //to end if false we will use return to lower processing time
@@ -69,7 +82,7 @@ bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<u
     CRIPEMD160().Write(&(tempverifyhash[0]), tempverifyhash.size()).Write(&(exmerklewit[i][0]), exmerklewit[i].size()).Finalize(&(tempverifyhash[0]));
   }
 
-  //end checking if new publickey is a part of the root key
+  //END checking if new publickey is a part of the root key
 
   /*
       unsigned char* datapart;
@@ -87,7 +100,7 @@ bool LAMPORT::checksig(vector<unsigned char> data, char sig[20][2][20], vector<u
       */
       return true; // if compleats all tests return true
 }
-    char *LAMPORT::createsig(unsigned char data[10000], uint512_t prikey, int sellectedpubkey)
+    char *LAMPORT::createsig(valtype *data, uint512_t *prikey, int sellectedpubkey)
     {
       /* the signing will happen under this */
       return &sig[0][0][0];

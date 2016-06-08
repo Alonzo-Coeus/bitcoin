@@ -124,6 +124,11 @@ class AuthServiceProxy(object):
                 return self._get_response()
             else:
                 raise
+        except BrokenPipeError:
+            # Python 3.5+ raises this instead of BadStatusLine when the connection was reset
+            self.__conn.close()
+            self.__conn.request(method, path, postdata, headers)
+            return self._get_response()
 
     def __call__(self, *args):
         AuthServiceProxy.__id_count += 1
@@ -153,6 +158,11 @@ class AuthServiceProxy(object):
         if http_response is None:
             raise JSONRPCException({
                 'code': -342, 'message': 'missing HTTP response from server'})
+
+        content_type = http_response.getheader('Content-Type')
+        if content_type != 'application/json':
+            raise JSONRPCException({
+                'code': -342, 'message': 'non-JSON HTTP response with \'%i %s\' from server' % (http_response.status, http_response.reason)})
 
         responsedata = http_response.read().decode('utf8')
         response = json.loads(responsedata, parse_float=decimal.Decimal)

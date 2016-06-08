@@ -11,7 +11,7 @@ typedef vector<unsigned char> valtype;
 bool LAMPORT::checksig(valtype *data, valtype *asig, valtype *rootkey, valtype *merklewit)
 {
 //STARTING to convert asig vector to sig[20][2][20]
-char[20][2][20] sig;
+unsigned char sig[20][2][20];
 for(int i = 0; i < 20; i++)
 {
   for(int o = 0; o < 2; o++)

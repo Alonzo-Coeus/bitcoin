@@ -8,8 +8,14 @@
 using namespace std;
 typedef vector<unsigned char> valtype;
 
-bool LAMPORT::checksig(valtype *data, valtype *asig, valtype *rootkey, valtype *merklewit)
+bool LAMPORT::checksig(valtype *pointerdata, valtype *pointerasig, valtype *pointerrootkey, valtype *pointermerklewit)
 {
+
+valtype data = *pointerdata;
+valtype asig = *pointerasig;
+valtype rootkey = *pointerrootkey;
+valtype merklewit = *pointermerklewit;
+
 //STARTING to convert asig vector to sig[20][2][20]
 unsigned char sig[20][2][20];
 for(int i = 0; i < 20; i++)

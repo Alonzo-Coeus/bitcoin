@@ -108,6 +108,9 @@ for(int i = 0; i < 20; i++)
 }
     char *LAMPORT::createsig(valtype *data, uint512_t *prikey, int sellectedpubkey)
     {
+      valtype dat = *data;
+      uint512_t privatekey = *prikey;
+      
       /* the signing will happen under this */
       return &sig[0][0][0];
     }

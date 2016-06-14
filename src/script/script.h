@@ -167,10 +167,10 @@ enum opcodetype
     OP_NOP3 = 0xb2,
     OP_CHECKSEQUENCEVERIFY = OP_NOP3,
     //QSafe Function
-    OP_NOP4 = 0xb3;
-    OP_NOP5 = 0xb4;
-    OP_NOP6 = 0xb5;
-    OP_NOP7 = 0xb6
+    OP_NOP4 = 0xb3,
+    OP_NOP5 = 0xb4,
+    OP_NOP6 = 0xb5,
+    OP_NOP7 = 0xb6,
     OP_LAMPORTCHECKSIG = OP_NOP4,
     OP_LAMPORTCHECKSIGVERIFY = OP_NOP5,
     OP_LAMPORTCHECKMULTISIG = OP_NOP6,

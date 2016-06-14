@@ -27,9 +27,6 @@ static const int MAX_OPS_PER_SCRIPT = 201;
 // Maximum number of public keys per multisig
 static const int MAX_PUBKEYS_PER_MULTISIG = 20;
 
-// Maximum script length in bytes
-static const int MAX_SCRIPT_SIZE = 10000;
-
 // Threshold for nLockTime: below this value it is interpreted as block number,
 // otherwise as UNIX timestamp.
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
@@ -170,14 +167,18 @@ enum opcodetype
     OP_NOP3 = 0xb2,
     OP_CHECKSEQUENCEVERIFY = OP_NOP3,
     //QSafe Function
-    OP_LAMPORTCHECKSIG = 0xb3,
-    OP_LAMPORTCHECKSIGVERIFY = 0xb4,
-    OP_LAMPORTCHECKMULTISIG = 0xb5,
-    OP_LAMPORTCHECKMULTISIGVERIFY = 0xb6,
+    OP_NOP4 = 0xb3;
+    OP_NOP5 = 0xb4;
+    OP_NOP6 = 0xb5;
+    OP_NOP7 = 0xb6
+    OP_LAMPORTCHECKSIG = OP_NOP4,
+    OP_LAMPORTCHECKSIGVERIFY = OP_NOP5,
+    OP_LAMPORTCHECKMULTISIG = OP_NOP6,
+    OP_LAMPORTCHECKMULTISIGVERIFY = OP_NOP7,
     OP_NOP8 = 0xb7,
     OP_NOP9 = 0xb8,
     OP_NOP10 = 0xb9,
-    
+
 
     // template matching params
     OP_SMALLINTEGER = 0xfa,
@@ -574,26 +575,17 @@ public:
         int nFound = 0;
         if (b.empty())
             return nFound;
-        CScript result;
-        iterator pc = begin(), pc2 = begin();
+        iterator pc = begin();
         opcodetype opcode;
         do
         {
-            result.insert(result.end(), pc2, pc);
-            while (static_cast<size_t>(end() - pc) >= b.size() && std::equal(b.begin(), b.end(), pc))
+            while (end() - pc >= (long)b.size() && memcmp(&pc[0], &b[0], b.size()) == 0)
             {
-                pc = pc + b.size();
+                pc = erase(pc, pc + b.size());
                 ++nFound;
             }
-            pc2 = pc;
         }
         while (GetOp(pc, opcode));
-
-        if (nFound > 0) {
-            result.insert(result.end(), pc2, end());
-            *this = result;
-        }
-
         return nFound;
     }
     int Find(opcodetype op) const
@@ -634,7 +626,7 @@ public:
      */
     bool IsUnspendable() const
     {
-        return (size() > 0 && *begin() == OP_RETURN) || (size() > MAX_SCRIPT_SIZE);
+        return (size() > 0 && *begin() == OP_RETURN);
     }
 
     void clear()

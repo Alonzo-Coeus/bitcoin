@@ -992,9 +992,7 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                 case OP_LAMPORTCHECKSIG:
                 case OP_LAMPORTCHECKSIGVERIFY:
                 {
-                    if (flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS)
-                        return set_error(serror, SCRIPT_ERR_DISCOURAGE_UPGRADABLE_NOPS);
-                   /* if (stack.size() < 2)
+                   if (stack.size() < 2)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
 
                     valtype& vchSig    = stacktop(-2);
@@ -1012,17 +1010,14 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                             popstack(stack);
                         else
                             return set_error(serror, SCRIPT_ERR_CHECKSIGVERIFY);
-                    }*/
+                    }
                 }
                 break;
                 
                 case OP_LAMPORTCHECKMULTISIG:
                 case OP_LAMPORTCHECKMULTISIGVERIFY:
                 {
-                   if (flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS)
-                        return set_error(serror, SCRIPT_ERR_DISCOURAGE_UPGRADABLE_NOPS);
                     // ([sig ...] num_of_signatures [pubkey ...] num_of_pubkeys -- bool)
-                    /*
                     int i = 1;
                     if ((int)stack.size() < i)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
@@ -1108,7 +1103,6 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                         else
                             return set_error(serror, SCRIPT_ERR_CHECKMULTISIGVERIFY);
                     }
-                    */
                 }
                 break;
 

@@ -992,13 +992,15 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                 case OP_LAMPORTCHECKSIG:
                 case OP_LAMPORTCHECKSIGVERIFY:
                 {
-                    if (stack.size() < 2)
+                    if (flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS)
+                        return set_error(serror, SCRIPT_ERR_DISCOURAGE_UPGRADABLE_NOPS);
+                   /* if (stack.size() < 2)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
 
                     valtype& vchSig    = stacktop(-2);
                     valtype& vchPubKey = stacktop(-1);
 
-                    bool fSuccess = /* place holder */ true;
+                    bool fSuccess = true;
 
                     popstack(stack);
                     popstack(stack);
@@ -1010,14 +1012,17 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                             popstack(stack);
                         else
                             return set_error(serror, SCRIPT_ERR_CHECKSIGVERIFY);
-                    }
+                    }*/
                 }
-
+                break;
+                
                 case OP_LAMPORTCHECKMULTISIG:
                 case OP_LAMPORTCHECKMULTISIGVERIFY:
                 {
+                   if (flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS)
+                        return set_error(serror, SCRIPT_ERR_DISCOURAGE_UPGRADABLE_NOPS);
                     // ([sig ...] num_of_signatures [pubkey ...] num_of_pubkeys -- bool)
-
+                    /*
                     int i = 1;
                     if ((int)stack.size() < i)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
@@ -1062,7 +1067,7 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                         // See the script_(in)valid tests for details.
 
                         // Check signature
-                        bool fOk = /* place holder */ true;
+                        bool fOk = true;
 
                         if (fOk) {
                             isig++;
@@ -1096,13 +1101,14 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
 
                     stack.push_back(fSuccess ? vchTrue : vchFalse);
 
-                    if (opcode == OP_CHECKMULTISIGVERIFY)
+                    if (opcode == OP_LAMPORTCHECKMULTISIGVERIFY)
                     {
                         if (fSuccess)
                             popstack(stack);
                         else
                             return set_error(serror, SCRIPT_ERR_CHECKMULTISIGVERIFY);
                     }
+                    */
                 }
                 break;
 

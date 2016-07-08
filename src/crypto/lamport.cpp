@@ -89,21 +89,9 @@ for(int i = 0; i < 20; i++)
   }
 
   //END checking if new publickey is a part of the root key
-
-  /*
-      unsigned char* datapart;
-      unsigned char[(160/LAMPORT::chuncksize)]* datahashs;
-      for(int i = 0; i < (160/LAMPORT::chuncksize); i++)
-      {
-
-        for(int o = 0; o < chuncksizeinbyte; o++)
-        {
-          datapart[o] = data[(i * LAMPORT::chuncksize) + o];
-        }
-
-        CRIPEMD160().Write(begin_ptr(datapart), datapart.size()).Finalize(begin_ptr(datahashs[i]));
-      }
-      */
+  //START verifying sig
+  
+  //END verifying sig
       return true; // if compleats all tests return true
 }
     char *LAMPORT::createsig(valtype *data, uint512_t *prikey, int sellectedpubkey)

@@ -103,13 +103,13 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
   for(int i = 0; i < 160/(LAMPORT::chunksize*8); i++) {
     //get sig, key pair and sellect hash segments
     memcpy(&(sellectedhashseg), &(hashdata[i*LAMPORT::chunksize]), LAMPORT::chunksize);
-    sellectedinthashseg = (uint512_t)sellectedhashseg;
+    uint512_t sellectedinthashseg = (uint512_t)sellectedhashseg;
     for(int o = 0; o < 2; o++) {
       memcpy(&(keypair[o]), &(pubkey[i][o]), 20);
       memcpy(&(sigpair[i]), &(sig[i][o]), 20);
     }
     //
-    int i_a = 0;
+    uint512_t i_a = 0;
     while (true) { //i-a sigpair[0]
       CRIPEMD160().Write(&(sigpair[0]), data.size()).Finalize(&(sigpair[0]));
       i_a++; //increment after data hased
@@ -120,7 +120,7 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
         break;
       }
     }
-    int i_b = 0;
+    uint512_t i_b = 0;
     while (true) { //i-b sigpair[1]
       CRIPEMD160().Write(&(sigpair[1]), data.size()).Finalize(&(sigpair[1]));
       i_b++;
@@ -131,7 +131,7 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
         break;
       }
     }
-    if((256-i_a != i_b-1) || (256-i_a != V)) {
+    if((256-i_a != i_b-1) || (256-i_a != sellectedinthashseg)) {
       return false;
     }
   }

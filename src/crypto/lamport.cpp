@@ -17,8 +17,8 @@ valtype rootkey = *pointerrootkey;
 valtype merklewit = *pointermerklewit;
 
 //STARTING to convert asig vector to sig[20][2][20]
-unsigned char sig[20][2][20];
-for(int i = 0; i < 20; i++)
+unsigned char sig[160/(LAMPORT::chunksize*8)][2][20];
+for(int i = 0; i < (LAMPORT::chunksize*8); i++)
 {
   for(int o = 0; o < 2; o++)
   {
@@ -31,7 +31,7 @@ for(int i = 0; i < 20; i++)
 //END converting asig vector to sig[20][2][20]
 
   valtype exmerklewit[8]; /*this is the merkle wit minus the main public key max number of publickeys to rootkey is 256 due to 2^n where n is the first array index is 8*/
-  char pubkey[20][2][20];
+  char pubkey[160/(LAMPORT::chunksize*8)][2][20];
   valtype hashablepubkey;
 
   //START converting merkle wit to exmerklewit and public key
@@ -89,16 +89,58 @@ for(int i = 0; i < 20; i++)
   }
 
   //END checking if new publickey is a part of the root key
-  //START verifying sig
-  
-  //END verifying sig
-      return true; // if compleats all tests return true
+
+  //START checking if sig is valid
+
+  //create hash of data
+  valtype hashdata;
+  valtype sellectedhashseg; //to allow seamless scaling to larger segment sizes
+  uint512_t sellectedinthashseg; //memcpy of valtype to uint512_t format
+  CRIPEMD160().Write(&(data[0]), data.size()).Finalize(&(hashdata[0]));
+  valtype keypair[2]; //the two public values at the ends of the ladder
+  valtype sigpair[2]; //the two values from each side of hash ladder when signing
+
+  for(int i = 0; i < 160/(LAMPORT::chunksize*8); i++) {
+    //get sig, key pair and sellect hash segments
+    memcpy(&(sellectedhashseg), &(hashdata[i*LAMPORT::chunksize]), LAMPORT::chunksize);
+    sellectedinthashseg = (uint512_t)sellectedhashseg;
+    for(int o = 0; o < 2; o++) {
+      memcpy(&(keypair[o]), &(pubkey[i][o]), 20);
+      memcpy(&(sigpair[i]), &(sig[i][o]), 20);
+    }
+    //
+    int i_a = 0;
+    valtype
+    while (true) { //i-a sigpair[0]
+      CRIPEMD160().Write(&(sigpair[0]), data.size()).Finalize(&(sigpair[0]));
+      i_a++; //increment after data hased
+      if(o = 256) {
+        return false;
+      }
+      if(sigpair[0] == keypair[0]) {
+        break;
+      }
+    }
+    int i_b = 0;
+    while (true) { //i-b sigpair[1]
+      CRIPEMD160().Write(&(sigpair[1]), data.size()).Finalize(&(sigpair[1]));
+      i_b++;
+      if(o = 256) {
+        return false;
+      }
+      if(sigpair[1] == keypair[1]) {
+        break;
+      }
+    }
+    if((256-i_a != i_b-1) || (256-i_a != V)) {
+      return false;
+    }
+  }
+  //END checking if sig is valid
+  return true; // if compleats all tests return true
 }
     char *LAMPORT::createsig(valtype *data, uint512_t *prikey, int sellectedpubkey)
     {
-      valtype dat = *data;
-      uint512_t privatekey = *prikey;
-      
       /* the signing will happen under this */
       return &sig[0][0][0];
     }

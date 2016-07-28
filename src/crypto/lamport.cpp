@@ -110,7 +110,6 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
     }
     //
     int i_a = 0;
-    valtype
     while (true) { //i-a sigpair[0]
       CRIPEMD160().Write(&(sigpair[0]), data.size()).Finalize(&(sigpair[0]));
       i_a++; //increment after data hased

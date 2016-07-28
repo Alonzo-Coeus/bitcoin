@@ -995,11 +995,12 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                     if (stack.size() < 2)
                         return set_error(serror, SCRIPT_ERR_INVALID_STACK_OPERATION);
 
-                    valtype& vchSig    = stacktop(-2);
-                    valtype& vchPubKey = stacktop(-1);
+                    valtype& vchSig     = stacktop(-3);
+                    valtype& vchMerkWit = stacktop(-2);
+                    valtype& vchPubKey  = stacktop(-1);
 
-                    bool fSuccess = /* place holder */ true;
-
+                    bool fSuccess = LAMPORT::checksig(scriptCode, vchSig, vchPubKey, vchMerkWit);
+                    popstack(stack);
                     popstack(stack);
                     popstack(stack);
                     stack.push_back(fSuccess ? vchTrue : vchFalse);

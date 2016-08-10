@@ -18,7 +18,7 @@ private:
 public:
     static const int chuncksize = 1; /* in bytes */
     bool checksig(valtype *pointerdata, valtype *pointerasig, valtype *pointerrootkey, valtype *pointermerklewit);
-    char *createsig(valtype *data, uint512_t *prikey, int sellectedpubkey);                 /* data is data to be signed and prikey is a sudo-random num gen seed */
+    char *createsig(valtype *pdata, uint512_t *pprikey, int sellectedpubkey);                 /* data is data to be signed and prikey is a sudo-random num gen seed */
     char *createmerklewit(uint512_t prikey, int sellectedpubkey);
     char *createrootkey(uint512_t prikey);
     char *createpubkey(uint512_t prikey);

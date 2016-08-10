@@ -102,8 +102,9 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
 
   for(int i = 0; i < 160/(LAMPORT::chunksize*8); i++) {
     //get sig, key pair and sellect hash segments
+    uint512_t sellectedinthashseg;
     memcpy(&(sellectedhashseg), &(hashdata[i*LAMPORT::chunksize]), LAMPORT::chunksize);
-    uint512_t sellectedinthashseg = (uint512_t)sellectedhashseg;
+    memcpy(&(sellectedinthashseg), &(sellectedhashseg), LAMPORT::chunksize);
     for(int o = 0; o < 2; o++) {
       memcpy(&(keypair[o]), &(pubkey[i][o]), 20);
       memcpy(&(sigpair[i]), &(sig[i][o]), 20);

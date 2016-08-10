@@ -113,7 +113,7 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
     while (true) { //i-a sigpair[0]
       CRIPEMD160().Write(&(sigpair[0]), data.size()).Finalize(&(sigpair[0]));
       i_a++; //increment after data hased
-      if(o = 256) {
+      if(o == 160) {
         return false;
       }
       if(sigpair[0] == keypair[0]) {
@@ -124,22 +124,31 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
     while (true) { //i-b sigpair[1]
       CRIPEMD160().Write(&(sigpair[1]), data.size()).Finalize(&(sigpair[1]));
       i_b++;
-      if(o = 256) {
+      if(o == 160) {
         return false;
       }
       if(sigpair[1] == keypair[1]) {
         break;
       }
     }
-    if((256-i_a != i_b-1) || (256-i_a != sellectedinthashseg)) {
+    if((160-i_a != i_b-1) || (160-i_a != sellectedinthashseg)) {
       return false;
     }
   }
   //END checking if sig is valid
   return true; // if compleats all tests return true
 }
-    char *LAMPORT::createsig(valtype *data, uint512_t *prikey, int sellectedpubkey)
+    char *LAMPORT::createsig(valtype *pdata, uint512_t *pprikey, int sellectedpubkey)
     {
       /* the signing will happen under this */
+      valtype data = *pdata;
+      uint512_t prikey = *pprikey;
+      valtype pkey[20][2][20];
+
+      valtype hash;
+      CRIPEMD160().Write(&(data), data.size()).Finalize(&(hash));
+
+
+
       return &sig[0][0][0];
     }

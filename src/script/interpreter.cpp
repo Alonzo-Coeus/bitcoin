@@ -999,6 +999,12 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                     valtype& vchMerkWit = stacktop(-2);
                     valtype& vchPubKey  = stacktop(-1);
 
+                    // Subset of script starting at the most recent codeseparator
+                    CScript scriptCode(pbegincodehash, pend);
+
+                    // Drop the signature, since there's no way for a signature to sign itself
+                    scriptCode.FindAndDelete(CScript(vchSig));
+
                     bool fSuccess = LAMPORT::checksig(scriptCode, vchSig, vchPubKey, vchMerkWit);
                     popstack(stack);
                     popstack(stack);

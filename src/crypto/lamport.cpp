@@ -114,7 +114,7 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
     while (true) { //i-a sigpair[0]
       CRIPEMD160().Write(&(sigpair[0]), data.size()).Finalize(&(sigpair[0]));
       i_a++; //increment after data hased
-      if(o == 160) {
+      if(i_a == 160) {
         return false;
       }
       if(sigpair[0] == keypair[0]) {
@@ -125,7 +125,7 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
     while (true) { //i-b sigpair[1]
       CRIPEMD160().Write(&(sigpair[1]), data.size()).Finalize(&(sigpair[1]));
       i_b++;
-      if(o == 160) {
+      if(i_b == 160) {
         return false;
       }
       if(sigpair[1] == keypair[1]) {

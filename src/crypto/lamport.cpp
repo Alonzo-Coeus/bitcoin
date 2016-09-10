@@ -145,9 +145,11 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
       valtype data = *pdata;
       uint512_t prikey = *pprikey;
       valtype pkey[20][2][20];
-
+      unsigned char sig[20][2][20];
+      unsigned char hashabledata[data.size()];
+      
       valtype hash;
-      CRIPEMD160().Write(&(data), data.size()).Finalize(&(hash));
+      CRIPEMD160().Write(&(hashabledata), hashabledata.size()).Finalize(&(hash));
 
 
 

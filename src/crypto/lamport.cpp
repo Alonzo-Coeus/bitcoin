@@ -97,8 +97,8 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
   valtype sellectedhashseg; //to allow seamless scaling to larger segment sizes
   uint512_t sellectedinthashseg; //memcpy of valtype to uint512_t format
   CRIPEMD160().Write(&(data[0]), data.size()).Finalize(&(hashdata[0]));
-  valtype keypair[2]; //the two public values at the ends of the ladder
-  valtype sigpair[2]; //the two values from each side of hash ladder when signing
+  unsigned char keypair[2][20]; //the two public values at the ends of the ladder
+  unsigned char sigpair[2][20]; //the two values from each side of hash ladder when signing
 
   for(int i = 0; i < 160/(LAMPORT::chunksize*8); i++) {
     //get sig, key pair and sellect hash segments
@@ -106,8 +106,8 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
     memcpy(&(sellectedhashseg), &(hashdata[i*LAMPORT::chunksize]), LAMPORT::chunksize);
     memcpy(&(sellectedinthashseg), &(sellectedhashseg), LAMPORT::chunksize);
     for(int o = 0; o < 2; o++) {
-      memcpy(&(keypair[o]), &(pubkey[i][o]), 20);
-      memcpy(&(sigpair[i]), &(sig[i][o]), 20);
+      memcpy(&(keypair[o][0]), &(pubkey[i][o]), 20);
+      memcpy(&(sigpair[i][0]), &(sig[i][o]), 20);
     }
     //
     uint512_t i_a = 0;

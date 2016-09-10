@@ -139,17 +139,16 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
   //END checking if sig is valid
   return true; // if compleats all tests return true
 }
-    char *LAMPORT::createsig(valtype *pdata, uint512_t *pprikey, int sellectedpubkey)
+    unsigned char *LAMPORT::createsig(valtype *pdata, uint512_t *pprikey, int sellectedpubkey)
     {
       /* the signing will happen under this */
       valtype data = *pdata;
       uint512_t prikey = *pprikey;
       valtype pkey[20][2][20];
-      unsigned char sig[20][2][20];
       unsigned char hashabledata[data.size()];
       
       valtype hash;
-      CRIPEMD160().Write(&(hashabledata), hashabledata.size()).Finalize(&(hash));
+      CRIPEMD160().Write(&(hashabledata), sizeof(hashabledata)).Finalize(&(hash));
 
 
 

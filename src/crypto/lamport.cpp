@@ -112,7 +112,7 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
     //
     uint512_t i_a = 0;
     while (true) { //i-a sigpair[0]
-      CRIPEMD160().Write(&(sigpair[0]), data.size()).Finalize(&(sigpair[0]));
+      CRIPEMD160().Write(&(sigpair[0][0]), data.size()).Finalize(&(sigpair[0][0]));
       i_a++; //increment after data hased
       if(i_a == 160) {
         return false;
@@ -123,7 +123,7 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
     }
     uint512_t i_b = 0;
     while (true) { //i-b sigpair[1]
-      CRIPEMD160().Write(&(sigpair[1]), data.size()).Finalize(&(sigpair[1]));
+      CRIPEMD160().Write(&(sigpair[1][0]), data.size()).Finalize(&(sigpair[1][0]));
       i_b++;
       if(i_b == 160) {
         return false;

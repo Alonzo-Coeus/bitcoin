@@ -12,9 +12,9 @@ typedef std::vector<unsigned char> valtype;
 class LAMPORT
 {
 private:
-    char pubkeys[320][20];
-    char prikeys[320][20];
-    char sig[20][2][20];
+    unsigned char pubkeys[320][20];
+    unsigned char prikeys[320][20];
+    unsigned char sig[20][2][20];
 public:
     static const int chunksize = 1; /* in bytes */
     bool checksig(valtype *pointerdata, valtype *pointerasig, valtype *pointerrootkey, valtype *pointermerklewit);

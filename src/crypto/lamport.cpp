@@ -148,7 +148,7 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
       unsigned char * hashabledata = new unsigned char[data.size()];
       
       valtype hash;
-      CRIPEMD160().Write(&(hashabledata), data.size()).Finalize(&(hash));
+      CRIPEMD160().Write(&(hashabledata), sizeof(hashabledata)).Finalize(&(hash));
 
 
 

@@ -39,7 +39,7 @@ for(int i = 0; i < (LAMPORT::chunksize*8); i++)
   unsigned int i;
   for(i = 0; i < sizeof(merklewit); i++)
   {
-    if(merklewit[i] == 0x00 && merklewit[i+1] == 0x00) /*test for partition beetween merkle segments*/
+    if(merklewit[i] == 0x20 && merklewit[i+1] == 0x03) /*test for partition beetween merkle segments; magic number for partition*/
       break;
     merklebuffer[i] = merklewit[i];
   }

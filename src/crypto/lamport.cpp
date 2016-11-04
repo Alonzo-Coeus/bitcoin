@@ -18,13 +18,13 @@ valtype merklewit = *pointermerklewit;
 
 //STARTING to convert asig vector to sig[20][2][20]
 unsigned char sig[160/(LAMPORT::chunksize*8)][2][20];
-for(int i = 0; i < (LAMPORT::chunksize*8); i++)
+for(int i = 0; i < 160/(LAMPORT::chunksize*8); i++)
 {
   for(int o = 0; o < 2; o++)
   {
     for(int p = 0; p < 20; p++)
     {
-      sig[i][o][p] = asig[p + (o * 20) + (p * 40)];
+      sig[i][o][p] = asig[i + (o * 20) + (p * 40)];
     }
   }
 }
